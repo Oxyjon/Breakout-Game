@@ -3,6 +3,7 @@ from turtle import Screen
 from player import Player
 from block import Block
 from ball import Ball
+from score import Score
 import time
 
 #init screen
@@ -10,6 +11,7 @@ screen = Screen()
 #screen setup
 screen.bgcolor('black')
 screen.setup(width=800, height=600)
+screen.tracer(0, 0)
 
 #create player
 player = Player((0, -265))
@@ -17,6 +19,8 @@ player = Player((0, -265))
 block = Block()
 #create ball
 ball = Ball()
+#create score
+score = Score()
 
 
 #listen to screen clicks
@@ -26,7 +30,7 @@ screen.onkey(player.go_right, 'd')
 
 game_is_on = True
 while game_is_on:
-    time.sleep(0.01)
+    time.sleep(0.02)
     screen.update()
     ball.move()
 
@@ -48,12 +52,14 @@ while game_is_on:
     #Detect Block Colision
     for blk in block.blocks:
         if blk.ycor() - 20 <= ball.ycor() <= blk.ycor() + 20 and (blk.xcor() - 20 < ball.xcor() < blk.xcor() + 20):
-            blk.goto(1000,1000)
+            blk.goto(500, 500)
+            score.add_point()
             ball.bounce_y()
             block.blocks.remove(blk)
 
     if len(block.blocks) == 0:
         turtle.done()
+        score.game_over()
         game_is_on = False
 
 
